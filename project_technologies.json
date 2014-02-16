@@ -1,7 +1,7 @@
 {
     "technologies": {
         "apis": [
-            "insert apis"
+            "Google Maps"
         ],
         "platforms": [
             "insert platforms"
@@ -11,6 +11,6 @@
         ]
     },
     "themes": [
-        "insert themes"
+        "Distance"
     ]
 }
