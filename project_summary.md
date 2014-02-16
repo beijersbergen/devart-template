@@ -1,5 +1,4 @@
-# Project Title
-The Distance From You To Us
+# The Distance From You To Us
 
 ## Authors
 - Beijersbergen van Henegouwen, David, beijersbergen
