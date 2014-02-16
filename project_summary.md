@@ -5,7 +5,7 @@
 - Huissen, Bas
 
 ## Description
-The internet allows us to transcend distances within an instant. We are here, together, but we are far away. We want to make the physical distances visible.
+The internet allows us to transcend distances within an instant. We are here, together, but we are far away. We want to make the physical distances tangible.
 
 ## Link to Prototype
 NOTE: If your project lives online you can add one or more links here. Make sure you have a stable version of your project running before linking it.
