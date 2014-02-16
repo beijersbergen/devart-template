@@ -5,7 +5,7 @@
 - Huissen, Bas
 
 ## Description
-Insert a description containing about 100 to 150 words, including your motivation and the meaning behind your idea and execution. The Judges will be keen to know how your idea pushes the boundaries of code and technology. 
+The internet allows us to transcend distances within an instant. We are here, together, but we are far away. We want to make the physical distances visible.
 
 ## Link to Prototype
 NOTE: If your project lives online you can add one or more links here. Make sure you have a stable version of your project running before linking it.
