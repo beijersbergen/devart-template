@@ -1,0 +1,142 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>The Distance From You To Us</title>
+    
+    <script src="http://maps.google.com/maps?file=api&v=2&sensor=true" type="text/javascript"></script>
+    <!-- According to the Google Maps API Terms of Service you are required display a Google map when using the Google Maps API. see: http://code.google.com/apis/maps/terms.html -->
+
+    <script type="text/javascript">
+        var geocoder, toUs, fromYou;
+
+        function initialize() {
+            geocoder = new GClientGeocoder();
+            setLocation();
+        };
+
+        function setLocation() {
+            geocoder.getLocations('Amsterdam, Netherlands', function (response) { // Current location of the installation
+                toUs = {
+                    lat: response.Placemark[0].Point.coordinates[1],
+                    lon: response.Placemark[0].Point.coordinates[0],
+                    address: response.Placemark[0].address
+                };
+            })
+        };
+
+        function showLocation() {
+            geocoder.getLocations(document.forms[0].address.value, function (response) {
+                if (!response || response.Status.code != 200) {
+                    alert("Sorry, we were unable to geocode the second address");
+                } else {
+                    fromYou = {
+                        lat: response.Placemark[0].Point.coordinates[1],
+                        lon: response.Placemark[0].Point.coordinates[0],
+                        address: response.Placemark[0].address
+                    };
+                    calculateDistance();
+                }
+            });
+        };
+        
+        function calculateDistance() {
+            try {
+            	var ppi = window.devicePixelRatio;
+                var glatlng1 = new GLatLng(toUs.lat, toUs.lon);
+                var glatlng2 = new GLatLng(fromYou.lat, fromYou.lon);
+                var miledistance = glatlng1.distanceFrom(glatlng2, 3959)
+                    .toFixed(1);
+                var kmdistance = (miledistance * 1.609344)
+                    .toFixed(1);
+                var inchdistance = (miledistance * 63360)
+                    .toFixed(1);
+                var screendistance = (inchdistance * ppi);
+                                
+                document.getElementById('results')
+                    .innerHTML = '<strong>Us: </strong>' + toUs.address + '<br /><strong>You: </strong>' + fromYou.address + '<br /><strong>Distance: </strong>' + miledistance + ' miles or ' + kmdistance + ' kilometers or ' + inchdistance + ' pixels';
+            	document.getElementById('svg')
+            	 	.setAttribute ('height', screendistance + 160);   
+            	document.getElementById('svgline')
+            	 	.setAttribute ('y1', screendistance);
+            	document.getElementById('circleTous')
+            	 	.setAttribute ('cy', screendistance + 80);
+            	document.getElementById('tous')
+            	 	.setAttribute ('y', screendistance + 80);
+            	document.getElementById('fromyou')
+            	 	.firstChild.nodeValue = (fromYou.address).split(',')[0];
+            	document.getElementById('tous')
+            	 	.firstChild.nodeValue = (toUs.address).split(',')[0];
+            } catch (error) {
+                alert(error);
+            }
+        }
+    </script>
+</head>
+
+<body onload="initialize()">
+    <form id="locationform" name="locationForm" style="display:none;" action="#" onsubmit="showLocation(); return false;">
+        <p>
+            <input id="input" type="text" name="address" value="" class="address_input" size="40" />
+            <input type="submit" name="find" value="set location" />
+        </p>
+    </form>
+    <div id="results"></div>
+    <svg id="svg" height="160" width="160">
+    	<g>
+    		<circle cx="80" cy="80" r="78" stroke="black" stroke-width="1" fill="white" />
+    		<text id="fromyou" x="80" y="80" font-family="Verdana" font-size="12" fill="black" style="text-anchor: middle; dominant-baseline: central;">&nbsp;</text>
+    	</g>
+    	<line id="svgline" x1="80" y1="0" x2="80" y2="160" style="stroke:rgb(0,0,0);stroke-width:1;" stroke-dasharray="20,10,1,10" stroke-linecap="round"/>
+    	<g>
+    		<circle id="circleTous" cx="80" cy="80" r="78" stroke="black" stroke-width="1" fill="white" />
+    		<text id="tous" x="80" y="" font-family="Verdana" font-size="12" fill="black" style="text-anchor: middle; dominant-baseline: central;">&nbsp;</text>
+    	</g>   	
+    </svg>
+    <script>
+        getLocation();
+        var location_timeout;
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                location_timeout = setTimeout("geolocFail()", 5000);
+                navigator.geolocation.getCurrentPosition(showPosition),
+                function (error) {
+                    clearTimeout(location_timeout);
+                    geolocFail();
+                }, {
+                    maximumAge: 5000,
+                    enableHighAccuracy: true
+                };
+            } else {
+                geolocFail();
+            }
+        };
+
+        function geolocFail() {
+            alert('Nothing clicked or GPS location denied');
+            document.getElementById('locationform')
+                .style.display = "block";
+        };
+
+
+        function showPosition(position) {
+            clearTimeout(location_timeout);
+
+            var latlng = new GLatLng(position.coords.latitude, position.coords.longitude);
+
+            geocoder.getLocations(latlng, function (response) {
+                fromYou = {
+                    lat: response.Placemark[0].Point.coordinates[1],
+                    lon: response.Placemark[0].Point.coordinates[0],
+                    address: response.Placemark[0].AddressDetails.Country.AdministrativeArea.Locality.LocalityName
+                };
+
+                calculateDistance();
+            });
+        };
+    </script>
+</body>
+
+</html>

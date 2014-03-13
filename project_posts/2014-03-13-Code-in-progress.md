@@ -1,0 +1,11 @@
+As chronicled in our first post the concept of our project is to give the physical distance from the user to us a digital equivalence.
+We're using Google Maps to get the distance from point A to B. The distances Google Maps spits out are, by default, calculated with roads in mind. But we want the distance as the crow flies. Luckily for us, there is a standard function for this: distanceFrom.
+
+The first thing we need, though, is the position of the user. We want the site to work as effortlessly as possible, so we want to get this information through accssing the GPS location. For privacy reasons, the user needs to allow the website to use GPS tracking. Unfortunately, there is no way to know if the user clicked the 'not now' option. As a workaround, we set a time-out function that shows an input field after a set amount of seconds of inactivity. In the input field the user can type their location. It's not ideal, but the only solution we could find.
+The returned value is in meters. We need to convert these to pixels. To be accurate, it's important to know the pixel density of the device used. We use window.devicePixelRatio to get this information. Now all we need to do is multiply this value with the amount of inches of the distance and we know the length of the line we're going to draw.
+
+As you can imagine, the line that we want to draw can in some cases be a huge number. For example, if the user is in Tokyo and we are in Amsterdam that would result in 100,000,000 pixels.
+Drawing these lines presented us with problems that vary per browser. Firefox refuses to draw after a certain amount pixels. When you scroll the site in Chrome the screens turns black. We are trying to find ways to work around or solve this issues, which might be tricky as they are limitations of the browser itself.
+
+The next step will be to show the distance you 'travelled'. We want to break it up as follows:
+1cm, 10cm, 1 m, 10m, 50m, 100m, 500m, 1km, 10km, 50km, 100km, 500km, 1000km, 2000km, 3000km, etc.
